@@ -17,6 +17,7 @@
 
 - name: setup ambari-server
   shell: ambari-server setup -s -j {{ java_home }}
+  when: install_default
 
 #- name: configure ambari-server
 #  shell: creates=/opt/ambari-install/ambari-install-output ambari-server setup -j {{ java_home }} -s > /opt/ambari-install/ambari-install-output executable=/bin/bash
@@ -24,22 +25,22 @@
 #    JAVA_HOME: "{{ java_home }}"
 #  when: install_default
 
-#- name: configure ambari-server with remote metadata
-#  shell: creates=/opt/ambari-install/ambari-install-output ambari-server setup -j {{ java_home }} --database=postgres --databasehost={{ db_hostname }} --databaseport={{ db_port }} --databasename=ambari --postgresschema=ambari --databaseusername=ambari --databasepassword=bigdata -s > /opt/ambari-install/ambari-install-output executable=/bin/bash
-#  environment:
-#    JAVA_HOME: "{{ java_home }}"
-#  when: not install_default
+- name: configure ambari-server with remote metadata
+  shell: creates=/opt/ambari-install/ambari-install-output ambari-server setup -j {{ java_home }} --database=postgres --databasehost={{ db_hostname }} --databaseport={{ db_port }} --databasename=ambari --postgresschema=ambari --databaseusername=ambari --databasepassword=bigdata -s > /opt/ambari-install/ambari-install-output executable=/bin/bash
+  environment:
+    JAVA_HOME: "{{ java_home }}"
+  when: not install_default
 
-#- name: install postgresql
-#  yum: name=postgresql state=latest
-#  when: not install_default
+- name: install postgresql
+  yum: name=postgresql state=latest
+  when: not install_default
 
 #- name : check if ambari-server is installed
 #  wait_for : path=/opt/ambari-install/ambari-install-output search_regex="completed successfully"
 
-#- name: install ambari services
-#  git: repo={{ item.repo }} dest=/var/lib/ambari-server/resources/stacks/HDP/{{ item.hdp_version }}/services/{{ item.label }} 
-#  with_items: "{{ service_extensions }}"
+- name: install ambari services
+  git: repo={{ item.repo }} dest=/var/lib/ambari-server/resources/stacks/HDP/{{ item.hdp_version }}/services/{{ item.label }} 
+  with_items: "{{ service_extensions }}"
 #  ignore_errors: yes
 
 #- name : configure postgresql driver

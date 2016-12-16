@@ -32,7 +32,22 @@
   - { role: "abyres.ambari-server",
       install_default: true,
       java_home: "/usr/java/jdk1.8.0_112",
-      private_key: "keys/id_rsa" }
+      private_key: "keys/id_rsa" },
+      db_hostname: "<db_hostname>",
+      db_port: "<db_port>"
+      
+  - { role: "abyres.hdp-pgsql",
+      superuser_password: "<password>",
+      hive_db_password: "<password>",
+      oozie_db_password: "<password>",
+      ranger_db_password: "<password>",
+      rangeraudit_db_password: "<password>",
+      rangerkms_db_password: "<password>",
+      default_db_ambari_used: true,
+      ambari_active_username: "<password>",
+      ambari_db_password: "<password>",
+      ambari_db_name: "<password>"
+    }
 
 - hosts: hdfmaster
   remote_user: root

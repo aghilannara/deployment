@@ -11,7 +11,7 @@
 
 - name: set postgresql.conf
   template: src=pg.conf.sample dest=/var/lib/pgsql/data/postgresql.conf owner=postgres group=postgres mode=600
-
+  
 - name: Ensure the PostgreSQL service is running 
   service: name=postgresql state=started enabled=yes
 
@@ -72,9 +72,11 @@
 
 - name: copy initialize sql ambari
   template: src={{ ambari_postgres_sql }} dest=~/create.sql
-
+  when: not default_db_ambari_used
+ 
 - name: initialize hdpmetadata postgresql
   shell: psql -U postgres -f ~/create.sql -v username='"{{ ambari_active_username }}"' -v password="'{{ ambari_db_password }}'" -v dbname="{{ ambari_db_name }}"
+  when: not default_db_ambari_used
 
 - name: allow tcp port 5432 in iptable
   shell: iptables -I INPUT 1 -p tcp --dport 5432 -j ACCEPT

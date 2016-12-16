@@ -1,7 +1,5 @@
 ---
 # vars file for abyres.ambari-server
-java_home: /usr/java/jdk1.8.0_65/
-install_default: true
 service_extensions:
 #  - { repo: "https://github.com/abajwa-hw/solr-stack.git",
 #      hdp_version: "2.5",
