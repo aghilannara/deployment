@@ -1,0 +1,29 @@
+---
+# tasks file for abyres.java_version
+
+- name: install EPEL for CentOS
+  yum: name=epel-release
+  when: ansible_distribution == "CentOS"
+
+- name: install EPEL for RHEL
+  yum: name={{ epel_release_rpm_url }}
+  when: ansible_distribution == "RedHat"
+
+- name: check if Oracle JDK is installed
+  command: rpm -q {{ java_jdk }}
+  register: jdk_rpm_check
+  ignore_errors: yes
+
+- name: install Oracle JDK
+  yum: name={{ jdk_rpm_url }}
+  when: jdk_rpm_check.rc == 1
+
+- name: set default java
+  alternatives: name=java path=/usr/java/{{ java_jdk }}/jre/bin/java
+
+- name: install haveged
+  yum: name=haveged
+
+- name: start haveged
+  service: name=haveged state=restarted enabled=yes
+

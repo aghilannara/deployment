@@ -1,0 +1,10 @@
+# {{ ansible_managed }}
+{% if domain is defined %}
+domain {{domain}}
+{% endif %}
+{% for nameserver in upstream_nameservers %}
+nameserver {{nameserver}}
+{% endfor %}
+{% if searches is defined %}
+search {% for name in upstream_searches %}{{name}} {% endfor %}
+{% endif %}

@@ -1,0 +1,77 @@
+---
+# tasks file for abyres.hdpnode
+#
+- name: disable selinux
+  selinux: state=disabled 
+
+- name: install EPEL for CentOS
+  yum: name=epel-release
+  when: ansible_distribution == "CentOS"
+
+- name: install EPEL for RHEL
+  yum: name={{ epel_release_rpm_url }}
+  when: ansible_distribution == "RedHat"
+
+- name: update OS
+  yum: name=* state=latest
+
+- name: install unarchivers
+  yum: name=bzip2,unzip,tar
+
+- name: install other packages
+  yum: name=wget,curl,unzip,openssl,python,openssl-devel,python-devel state=present
+
+- name: check if Oracle JDK is installed
+  command: rpm -q {{ java_jdk }}
+  register: jdk_rpm_check
+  ignore_errors: yes
+
+- name: install Oracle JDK
+  yum: name={{ jdk_rpm_url }}
+  when: jdk_rpm_check.rc == 1
+
+#- name: install UnlimitedJCE policy
+#  unarchive: src={{ jce_policy_zip }} dest=/opt/ creates=/opt/UnlimitedJCEPolicyJDK8/
+
+#- name: apply UnlimitedJCE policy 
+#  shell: cp /opt/UnlimitedJCEPolicyJDK8/* /usr/java/{{ java_jdk }}/jre/lib/security/
+#  args:
+#    creates: /usr/java/{{ java_jdk }}/jre/lib/security/README.txt
+
+- name: set default java
+  alternatives: name=java path=/usr/java/{{ java_jdk }}/jre/bin/java 
+
+- name: check if service firewalld is installed
+  shell: "service firewalld status"
+  register: _svc_firewalld
+  failed_when: > 
+      _svc_firewalld.rc != 0 and ("Active: inactive (dead)" not in _svc_firewalld.stdout)
+
+- name: disable firewall
+  service: name=firewalld state=stopped enabled=no
+  when: "_svc_firewalld.rc == 0"
+
+- name: install HDP repository
+  template: src=hdp.repo dest=/etc/yum.repos.d/hdp.repo
+
+- name: install Ambari repository
+  template: src=ambari.repo dest=/etc/yum.repos.d/ambari.repo
+
+- name: install haveged
+  yum: name=haveged
+
+- name: start haveged
+  service: name=haveged state=restarted enabled=yes
+
+- name: get hostname
+  command: hostname 
+  register: hostname
+
+- name: configure hosts file
+  template: src=hosts_tmpl dest=/etc/hosts
+
+- name: copy ssh public key
+  authorized_key: user=root key="{{ item }}"
+  with_file:
+    - "{{ public_key }}"
+

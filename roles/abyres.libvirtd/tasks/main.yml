@@ -1,0 +1,19 @@
+---
+# tasks file for abyres.libvirtd
+- name: install libvirtd 
+  yum: name=libvirt-daemon*,virt-manager
+
+- name: install X forwarding
+  yum: name=xorg-x11-xauth
+
+- name: start libvirtd
+  service: name=libvirtd state=running enabled=yes
+
+- name: start libvirtd guests
+  service: name=libvirt-guests state=running enabled=yes
+
+- name: copy ISO
+  command: scp root@192.168.0.3:/root/CentOS-7.1-x86_64-DVD-1503-01.iso /var/lib/libvirt/images/CentOS-7.1-x86_64-DVD-1503-01.iso
+  args:
+    creates: /var/lib/libvirt/images/CentOS-7.1-x86_64-DVD-1503-01.iso
+

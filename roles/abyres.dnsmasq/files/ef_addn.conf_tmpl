@@ -1,0 +1,3 @@
+no-hosts
+addn-hosts=/opt/dnsmasq-config/hosts
+resolv-file=/opt/dnsmasq-config/resolv.conf

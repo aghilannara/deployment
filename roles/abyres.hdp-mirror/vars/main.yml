@@ -1,0 +1,13 @@
+---
+# vars file for abyres.hdp-mirror
+ambari_tarball_url: http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.2.1.1/ambari-2.2.1.1-centos7.tar.gz
+ambari_tarball_checksum: "sha256:c760f82fd2846298c844fac0a42c0f92f410a66ec1aff4f7358bd1ca5cce664e"
+
+hdp_tarball_url: http://public-repo-1.hortonworks.com/HDP/centos7/2.x/updates/2.4.0.0/HDP-2.4.0.0-centos7-rpm.tar.gz
+hdp_tarball_checksum: "sha256:280fee3f43d28efac61ab19e87e13a40094087b10427b2a0ef3b096d13ca64a0"
+
+hdputils_tarball_url: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/centos7/HDP-UTILS-1.1.0.20-centos7.tar.gz
+hdputils_tarball_checksum: "sha256:109812d84dde086591b862a6526fd55859b0d1966c5c2ffce3242b8d65c44d1b"
+
+jdk_rpm_url: https://mirror.its.sfu.ca/mirror/CentOS-Third-Party/NSG/common/x86_64/jdk-8u65-linux-x64.rpm
+jdk_rpm_checksum: "sha256:f6a9046c700e020e3f34e9aefb795f134e225f3242eda420fb99aa62bedbeabd"

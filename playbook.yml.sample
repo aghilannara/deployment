@@ -1,0 +1,55 @@
+- hosts: master:slaves
+  remote_user: root
+  roles: 
+  - { role: "abyres.hdpnode",
+      public_key: "keys/id_rsa.pub",
+      ambari_2410_repourl: "http://localrepo/mirror/hadoop/AMBARI-2.4.1.0/centos7/2.4.1.0-22/",
+      hdp_2500_repourl: "http://localrepo/mirror/hadoop/HDP/centos7/",
+      hdputils_11021_repourl: "http://localrepo/mirror/hadoop/HDP-UTILS-1.1.0.21/repos/centos7/",
+      jdk_rpm_url: "http://localrepo/mirror/files/jdk-8u112-linux-x64.rpm",
+      java_jdk: jdk1.8.0_112,
+      jce_policy_zip: "files/jce_policy-8.zip" }
+
+- hosts: master
+  remote_user: root
+  roles: 
+  - { role: "abyres.ntpd" }
+  - { role: "abyres.dnsmasq",
+      upstream_nameservers: ["ip.254"],
+      upstream_searches: ["dns_provider"],
+      hosts: [
+        "192.168.x.x hdpmaster.example.com hdpmaster",
+        "<ip_addr> <FQDN> <servername>",
+        "<ip_addr> <FQDN> <servername>",
+             ]}
+  
+  - { role: "abyres.resolv",
+      nameservers: ["<ip_addr_hdpmaster>"] }
+
+- hosts: ambari
+  remote_user: root
+  roles:  
+  - { role: "abyres.ambari-server",
+      install_default: true,
+      java_home: "/usr/java/jdk1.8.0_112",
+      private_key: "keys/id_rsa" }
+
+- hosts: hdfmaster
+  remote_user: root
+  roles: 
+  - { role: "abyres.hdf-ambari-server",
+      install_default: true,
+      java_home: "/usr/java/jdk1.8.0_112",
+      private_key: "keys/id_rsa" }
+
+- hosts: slaves
+  remote_user: root
+  roles: 
+  - { role: "abyres.java_version",
+      java_rpm_url: "http://localrepo/mirror/files/jdk-8u112-linux-x64.rpm",
+      java_jdk: jdk1.8.0_112
+    }
+  - { role: "abyres.resolv",
+      nameservers: ["<ip_addr_hdpmaster>"] }
+  - { role: "abyres.ntpd",
+      timeservers: ["<ip_addr_hdpmaster>"] }

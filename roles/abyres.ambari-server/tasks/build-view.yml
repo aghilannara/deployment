@@ -1,0 +1,26 @@
+#- set_fact: view_config="{{ item }}"
+#
+#- name: copy dir
+#  command: cp -r /opt/iframe-view/ambari-iframe-view /opt/iframe-view/{{ view_config.name }}-view
+#  args: 
+#    creates: /opt/iframe-view/{{ view_config.name }}-view
+#
+#- name: create pom file
+#  template: src=pom.xml_tmpl dest=/opt/iframe-view/{{ view_config.name }}-view/pom.xml
+#
+#- name: create view.xml
+#  template: src=view.xml_tmpl dest=/opt/iframe-view/{{ view_config.name }}-view/src/main/resources/view.xml
+#
+#- name: create index.xml
+#  template: src=index.html_tmpl dest=/opt/iframe-view/{{ view_config.name }}-view/src/main/resources/index.html
+#
+#- name: build jar
+#  command: mvn clean package
+#  args:
+#    creates: /opt/iframe-view/{{ view_config.name }}-view/target/{{ view_config.name }}-view-1.0.jar
+#    chdir: /opt/iframe-view/{{ view_config.name }}-view/
+#
+#- name: deploy jar into ambari
+#  command: cp /opt/iframe-view/{{ view_config.name }}-view/target/{{ view_config.name }}-view-1.0.jar /var/lib/ambari-server/resources/views/{{ view_config.name }}-view-1.0.jar
+#  args:
+#    creates: /var/lib/ambari-server/resources/views/{{ view_config.name }}-view-1.0.jar

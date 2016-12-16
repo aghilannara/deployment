@@ -1,0 +1,20 @@
+---
+# tasks file for abyres.dnsmasq
+
+- name: install dnsmasq
+  yum: name=dnsmasq state=latest
+
+- name : create config
+  file : dest=/opt/dnsmasq-config/ state=directory mode=0755
+
+- name: create hosts file
+  template: src=hosts_tmpl dest=/opt/dnsmasq-config/hosts
+
+- name: create upstream resolv file
+  template: src=resolv.conf_tmpl dest=/opt/dnsmasq-config/resolv.conf
+
+- name: configure dnsmasq 
+  copy: src=ef_addn.conf_tmpl dest=/etc/dnsmasq.d/ef_addn.conf
+
+- name: start dnsmasq
+  service: name=dnsmasq state=restarted enabled=yes

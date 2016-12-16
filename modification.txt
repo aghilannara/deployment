@@ -1,0 +1,38 @@
+[playbook.yml.sample]
+-->abyres.hdpnode
+*change the repourl
+ambari_2420_repourl
+hdp_2530_repourl
+hdputils_repourl
+jdk_rpm_url
+
+-->abyres.dnsmasq
+*change the ip
+nameservers: ["hdpmaster1 IP"]
+searches: ["provider_of_url"]
+hosts: [
+  "ip FQDN url_short",
+  "ip FQDN url_short", and so on
+
+-->abyres.ambari-server, change the hosts to master (since only one master)
+-->abyres.resolv
+use only hdpmaster IP in nameservers: and timeservers
+
+[inventory.sample]
+hosts IP to be changed
+
+[keys]
+copy id_rsa and id_rsa.pub from control machine. 
+
+[roles]
+[abyres.hdpnode/templates/ambari.repo and hdp.repo]
+download latest repo file from here and replace both the files
+
+http://public-repo-1.hortonworks.com/HDP/centos7/2.x/updates/2.5.3.0/hdp.repo
+http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.4.2.0/ambari.repo
+
+change the baseurl = {{ ambari_2420_repourl }} for ambari.repo
+change the baseurl = {{ hdp_2530_repourl }} for hdp.repo
+
+
+

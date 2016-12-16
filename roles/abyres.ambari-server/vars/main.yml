@@ -1,0 +1,43 @@
+---
+# vars file for abyres.ambari-server
+java_home: /usr/java/jdk1.8.0_65/
+install_default: true
+service_extensions:
+#  - { repo: "https://github.com/abajwa-hw/solr-stack.git",
+#      hdp_version: "2.5",
+#      label: "SOLR" }
+#  - { repo: "https://github.com/hortonworks-gallery/ambari-zeppelin-service.git",
+#      hdp_version: "2.5",
+#      label: "ZEPPELIN" }
+#  - { repo: "https://github.com/abajwa-hw/ambari-nifi-service.git",
+#      hdp_version: "2.5",
+#      label: "NIFI" }
+iframe_views:
+#  - { name: "atlas",
+#      label: "Atlas",
+#      url: "http://{{ atlas_host }}:21000/" }
+#  - { name: "falcon",
+#      label: "Falcon",
+#      url: "http://{{ falcon_host }}:15000/" }
+#  - { name: "nifi",
+#      label: "NiFi",
+#      url: "http://{{ nifi_host }}:9090/nifi" }
+#  - { name: "oozie",
+#      label: "Oozie",
+#      url: "http://{{ oozie_host }}:11000/oozie" }
+#  - { name: "jdv",
+#      label: "JDV Dashbuilder",
+#      url: "http://{{ jdv_host }}:8080/dashboard" }
+#  - { name: "jdv-ui",
+#      label: "JDV Composer",
+#      url: "http://{{ jdv_host }}:8080/dv-ui" }
+#  - { name: "cdrdroppedcalls",
+#      label: "CDR Dropped Calls",
+#      url: "http://{{ solr_host }}:8983/solr/banana/index.html#/dashboard/file/droppedcalls.json" }
+#  - { name: "cdrnetworktypechange",
+#      label: "CDR Network Type Change",
+#      url: "http://{{ solr_host }}:8983/solr/banana/index.html#/dashboard/file/networktypechange.json" }
+#  - { name: "sasva",
+#      label: "SAS Visual Analytics",
+#      url: "http://{{ sasva_host }}:8080/SASVisualAnalyticsHub" }
+#

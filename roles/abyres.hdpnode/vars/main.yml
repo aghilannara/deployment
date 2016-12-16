@@ -1,0 +1,12 @@
+---
+# vars file for abyres.hdpnode
+#private_key: 
+#public_key:
+#hdp_repourl: http://public-repo-1.hortonworks.com/HDP/centos6/2.x/updates/2.4.0.0
+#hdputils_repourl: http://public-repo-1.hortonworks.com/HDP-UTILS-1.1.0.20/repos/centos6
+#ambari_repourl: http://public-repo-1.hortonworks.com/ambari/centos7/2.x/updates/2.2.1.1
+#jdk_rpm_url: https://mirror.its.sfu.ca/mirror/CentOS-Third-Party/NSG/common/x86_64/jdk-8u65-linux-x64.rpm
+epel_release_rpm_url: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+#jce_policy_url: http://download.oracle.com/otn-pub/java/jce/8/jce_policy-8.zip
+#jce_policy_zip: 
+#hosts_file: 

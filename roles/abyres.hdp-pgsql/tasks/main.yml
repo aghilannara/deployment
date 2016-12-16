@@ -1,0 +1,80 @@
+---
+# tasks file for abyres.hdp-pgsql
+- name: install postgresql
+  yum: name=postgresql-server,postgresql,python-psycopg2 state=latest
+
+- name: initialized postgresql db
+  shell: postgresql-setup initdb
+
+- name: set pg_hba.conf
+  template: src=pg_hba.conf.sample dest=/var/lib/pgsql/data/pg_hba.conf owner=postgres group=postgres mode=600
+
+- name: set postgresql.conf
+  template: src=pg.conf.sample dest=/var/lib/pgsql/data/postgresql.conf owner=postgres group=postgres mode=600
+
+- name: Ensure the PostgreSQL service is running 
+  service: name=postgresql state=started enabled=yes
+
+- name: create postgresql superuser
+  postgresql_user: name=root password={{ superuser_password }} role_attr_flags=SUPERUSER
+  become: true
+  become_user: postgres
+
+- name: create hive metastore db
+  postgresql_db: name=hive encoding='UTF-8'
+  become: true
+  become_user: postgres
+
+- name: create hive metastore user
+  postgresql_user: db=hive name=hive password={{ hive_db_password }} priv=ALL
+  become: true
+  become_user: postgres
+
+- name: create oozie db
+  postgresql_db: name=oozie encoding='UTF-8'
+  become: true
+  become_user: postgres
+
+- name: create oozie user
+  postgresql_user: db=oozie name=oozie password={{ oozie_db_password }} priv=ALL
+  become: true
+  become_user: postgres
+
+- name: create ranger db
+  postgresql_db: name=ranger encoding='UTF-8'
+  become: true
+  become_user: postgres
+
+- name: create rangeradmin user
+  postgresql_user: db=ranger name=rangeradmin password={{ ranger_db_password }} priv=ALL
+  become: true
+  become_user: postgres
+
+- name: create ranger_audit db
+  postgresql_db: name=ranger_audit encoding='UTF-8'
+  become: true
+  become_user: postgres
+
+- name: create rangerlogger user
+  postgresql_user: db=ranger_audit name=rangerlogger password={{ rangeraudit_db_password }} priv=ALL
+  become: true
+  become_user: postgres
+
+- name: create rangerkms db
+  postgresql_db: name=rangerkms encoding='UTF-8'
+  become: true
+  become_user: postgres
+
+- name: create rangerkms user
+  postgresql_user: db=rangerkms name=rangerkms password={{ rangerkms_db_password }} priv=ALL
+  become: true
+  become_user: postgres
+
+- name: copy initialize sql ambari
+  template: src={{ ambari_postgres_sql }} dest=~/create.sql
+
+- name: initialize hdpmetadata postgresql
+  shell: psql -U postgres -f ~/create.sql -v username='"{{ ambari_active_username }}"' -v password="'{{ ambari_db_password }}'" -v dbname="{{ ambari_db_name }}"
+
+- name: allow tcp port 5432 in iptable
+  shell: iptables -I INPUT 1 -p tcp --dport 5432 -j ACCEPT

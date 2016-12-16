@@ -1,0 +1,20 @@
+- hosts: slaves
+  remote_user: root
+  roles: 
+  - { role: "abyres.java_version",
+      jdk_rpm_url: "http://localrepo/mirror/files/jdk-8u112-linux-x64.rpm",
+      java_jdk: jdk1.8.0_112,
+      epel_release_rpm_url: "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+    }
+
+#- hosts: hdfmaster
+#  remote_user: root
+#  roles: 
+#  - { role: "abyres.hdf-ambari-server",
+#      install_default: true,
+#      java_home: "/usr/java/jdk1.8.0_112",
+#      private_key: "keys/id_rsa",
+#      ambari_2410_repourl: "http://localrepo/mirror/hadoop/AMBARI-2.4.1.0/centos7/2.4.1.0-22/",
+#      hdf_mpack_url: "http://localrepo/mirror/hadoop/HDF/hdf-ambari-mpack-2.0.1.0-12.tar.gz"
+#    }
+

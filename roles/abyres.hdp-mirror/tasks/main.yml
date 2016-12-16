@@ -1,0 +1,46 @@
+---
+# tasks file for abyres.hdp-mirror
+- name: disable selinux
+  selinux: state=disabled
+
+- name: disable firewall
+  service: name=firewalld state=stopped enabled=no
+
+- name: install httpd
+  yum: name=httpd state=latest
+
+- name: create directory
+  file: dest=/opt/mirror/ state=directory mode=0755
+
+- name: download Ambari repo
+  get_url: url={{ ambari_tarball_url }} dest=/opt/mirror/{{ ambari_tarball_url | basename }} checksum={{ ambari_tarball_checksum }}
+
+- name: download HDP repo
+  get_url: url={{ hdp_tarball_url }} dest=/opt/mirror/{{ hdp_tarball_url | basename }} checksum={{ hdp_tarball_checksum }}
+
+- name: download HDP-UTILS repo
+  get_url: url={{ hdputils_tarball_url }} dest=/opt/mirror/{{ hdputils_tarball_url | basename }} checksum={{ hdputils_tarball_checksum }}
+
+- name: download JDK rpm
+  get_url: url={{ jdk_rpm_url }} dest=/opt/mirror/{{ jdk_rpm_url | basename }} checksum={{ jdk_rpm_checksum }}
+
+- name: create http mirror directory
+  file: dest=/var/www/html/mirror/ state=directory mode=0755
+
+- name: extract Ambari repo
+  unarchive: src=/opt/mirror/{{ ambari_tarball_url | basename }} dest=/var/www/html/mirror/ copy=no creates=/var/www/html/mirror/{{ ambari_tarball_url | basename }}
+
+- name: extract HDP repo
+  unarchive: src=/opt/mirror/{{ hdp_tarball_url | basename }} dest=/var/www/html/mirror/ copy=no creates=/var/www/html/mirror/{{ hdp_tarball_url | basename }}
+
+- name: extract HDP-UTILS repo
+  unarchive: src=/opt/mirror/{{ hdputils_tarball_url | basename }} dest=/var/www/html/mirror/ copy=no creates=/var/www/html/mirror/{{ hdputils_tarball_url | basename }}
+
+- name: copy JDK rpm
+  command: cp /opt/mirror/{{ jdk_rpm_url | basename }} /var/www/html/mirror/{{ jdk_rpm_url | basename }}
+  args:
+    creates: /var/www/html/mirror/{{ jdk_rpm_url | basename }}
+
+- name: start httpd
+  service: name=httpd state=running enabled=yes
+

@@ -1,0 +1,6 @@
+---
+# tasks file for abyres.resolv
+- name: configure name servers
+  template: src=resolv.conf_tmpl dest=/etc/resolv.conf
+  when: nameservers
+
